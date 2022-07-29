@@ -1,5 +1,3 @@
-root-path: C:/Users/Minh PC/Downloads
-
 target:
   default:
     name: "Others"

@@ -2,19 +2,20 @@ from typing import Dict, List
 import yaml
 import os
 import re
-import sys
+from dotenv import load_dotenv
 
 import utils
 
 
-def main(args: List[str]):
+def main():
+    root_path = os.getenv('ROOT_PATH')
     with open("./resources/application.yml", 'r') as f:
         conf = yaml.safe_load(f)
 
     target_folders = []
-    files = os.listdir(conf['root-path'])
+    files = os.listdir(root_path)
 
-    createTargetFolders(conf, target_folders)
+    createTargetFolders(conf, root_path, target_folders)
 
     for f in files:
         if f in target_folders:
@@ -22,28 +23,28 @@ def main(args: List[str]):
 
         moved = False
 
-        if os.path.isfile(os.path.join(conf['root-path'], f)):
+        if os.path.isfile(os.path.join(root_path, f)):
             _, file_extension = os.path.splitext(f)
 
             file_extension = re.sub(r'[^a-zA-Z]', '', file_extension).upper()
             for category in conf['target']['list']:
                 if file_extension in [cat.upper() for cat in category['extensions']]:
-                    utils.move(f, conf['root-path'], category['name'])
+                    utils.move(f, root_path, category['name'])
                     moved = True
                     break
 
         if not moved:
-            utils.move(f, conf['root-path'], conf['target']['default']['name'])
+            utils.move(f, root_path, conf['target']['default']['name'])
 
 
-def createTargetFolders(conf: Dict, target_folders: List[str]):
-    utils.create_folder(conf['root-path'], conf['target']['default']['name'])
+def createTargetFolders(conf: Dict, root_path: str, target_folders: List[str]):
+    utils.create_folder(root_path, conf['target']['default']['name'])
     target_folders.append(conf['target']['default']['name'])
     for category in conf['target']['list']:
-        utils.create_folder(conf['root-path'], category['name'])
+        utils.create_folder(root_path, category['name'])
         target_folders.append(category['name'])
 
 
 if __name__ == "__main__":
-    args = sys.argv[1:]
-    main(args)
+    load_dotenv()
+    main()
