@@ -2,7 +2,7 @@ import os
 import shutil
 
 
-def create_folder(root, category):
+def create_folder(root: str, category: str):
     folder_path = os.path.join(root, category)
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
@@ -10,7 +10,7 @@ def create_folder(root, category):
 # https://stackoverflow.com/questions/62064573/how-to-prevent-shutil-move-from-overwriting-a-file-if-it-already-exists
 
 
-def move(file_name, root, category):
+def move(file_name: str, root: str, category: str):
     source = os.path.join(root, file_name)
     dest = os.path.join(root, category, file_name)
     num = 0

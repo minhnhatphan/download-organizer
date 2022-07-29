@@ -1,12 +1,13 @@
-from logging import root
+from typing import Dict, List
 import yaml
 import os
 import re
+import sys
 
 import utils
 
 
-def main():
+def main(args: List[str]):
     with open("./resources/application.yml", 'r') as f:
         conf = yaml.safe_load(f)
 
@@ -35,7 +36,7 @@ def main():
             utils.move(f, conf['root-path'], conf['target']['default']['name'])
 
 
-def createTargetFolders(conf, target_folders):
+def createTargetFolders(conf: Dict, target_folders: List[str]):
     utils.create_folder(conf['root-path'], conf['target']['default']['name'])
     target_folders.append(conf['target']['default']['name'])
     for category in conf['target']['list']:
@@ -44,4 +45,5 @@ def createTargetFolders(conf, target_folders):
 
 
 if __name__ == "__main__":
-    main()
+    args = sys.argv[1:]
+    main(args)
