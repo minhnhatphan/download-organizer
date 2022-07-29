@@ -1,7 +1,6 @@
 from logging import root
 import yaml
 import os
-import shutil
 import re
 
 import utils
