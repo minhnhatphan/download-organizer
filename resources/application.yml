@@ -1,0 +1,10 @@
+root-path: C:/Users/Minh PC/Downloads
+
+target:
+  default:
+    name: "Others"
+  list:
+    - { name: "Images", extensions: [JPEG, JPG, PNG, GIF, TIFF, RAW] }
+    - { name: "Executables", extensions: [EXE] }
+    - { name: "Documents", extensions: [PDF, DOC, DOCX, PPT, PPTX, XLS, XLSX] }
+    - { name: "Compressed", extensions: [ZIP, RAR, TAR.XZ, TAR, 7Z] }
