@@ -8,8 +8,9 @@ import utils
 
 
 def main():
+    dir_path = "\\".join(os.path.dirname(os.path.realpath(__file__)).split("\\")[:-1])
     root_path = os.getenv('ROOT_PATH')
-    with open("./resources/application.yml", 'r') as f:
+    with open(os.path.join(dir_path, "resources/application.yml"), 'r') as f:
         conf = yaml.safe_load(f)
 
     target_folders = []
