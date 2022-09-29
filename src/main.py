@@ -2,21 +2,22 @@ from typing import Dict, List
 import yaml
 import os
 import re
-from dotenv import load_dotenv
+import sys
+import argparse
 
 import utils
 
 
-def main():
-    dir_path = "\\".join(os.path.dirname(os.path.realpath(__file__)).split("\\")[:-1])
-    root_path = os.getenv('ROOT_PATH')
+def main(args):
+    dir_path = "\\".join(os.path.dirname(
+        os.path.realpath(__file__)).split("\\")[:-1])
     with open(os.path.join(dir_path, "resources/application.yml"), 'r') as f:
         conf = yaml.safe_load(f)
 
     target_folders = []
-    files = os.listdir(root_path)
+    files = os.listdir(args.rootdir)
 
-    createTargetFolders(conf, root_path, target_folders)
+    createTargetFolders(conf, args.rootdir, target_folders)
 
     for f in files:
         if f in target_folders:
@@ -24,18 +25,18 @@ def main():
 
         moved = False
 
-        if os.path.isfile(os.path.join(root_path, f)):
+        if os.path.isfile(os.path.join(args.rootdir, f)):
             _, file_extension = os.path.splitext(f)
 
             file_extension = re.sub(r'[^a-zA-Z]', '', file_extension).upper()
             for category in conf['target']['list']:
                 if file_extension in [cat.upper() for cat in category['extensions']]:
-                    utils.move(f, root_path, category['name'])
+                    utils.move(f, args.rootdir, category['name'])
                     moved = True
                     break
 
         if not moved:
-            utils.move(f, root_path, conf['target']['default']['name'])
+            utils.move(f, args.rootdir, conf['target']['default']['name'])
 
 
 def createTargetFolders(conf: Dict, root_path: str, target_folders: List[str]):
@@ -47,5 +48,7 @@ def createTargetFolders(conf: Dict, root_path: str, target_folders: List[str]):
 
 
 if __name__ == "__main__":
-    load_dotenv()
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-rootdir', default="")
+    args = parser.parse_args()
+    main(args)
